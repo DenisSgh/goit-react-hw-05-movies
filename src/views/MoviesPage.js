@@ -6,18 +6,33 @@ import s from './Views.module.css';
 
 export default function MoviesPage() {
   const { pathname, search } = useLocation();
+  const location = useLocation();
   const history = useHistory();
   const [query, setQuery] = useState('');
   const [movies, setMovies] = useState(null);
 
   useEffect(() => {
-    if (search !== '') {
+    if (search === '') {
       return;
     }
 
-    history.push({ search: `query=${query}` });
+    // history.push({ search: `query=${query}` });
+    // console.log(history);
+    // console.log(value);
+    // setQuery();
+    // fetchMoviesByQuery(query).then(setMovies);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [history]);
+  }, []);
+
+  useEffect(() => {
+    console.log(1);
+    if (location.search === '') {
+      return;
+    }
+
+    // console.log(2);
+    // fetchMoviesByQuery(query).then(setMovies);
+  }, [location.search, query]);
 
   const handleChange = e => {
     setQuery(e.target.value);
@@ -27,7 +42,8 @@ export default function MoviesPage() {
     e.preventDefault();
 
     fetchMoviesByQuery(query).then(setMovies);
-    // setQuery('');
+    history.push({ ...location, search: `query=${query}` });
+    setQuery('');
   };
 
   return (
@@ -52,15 +68,21 @@ export default function MoviesPage() {
 
       {movies && (
         <ul>
-          {movies.map(({ id, title }) => (
+          {movies.map(({ id, title, poster_path }) => (
             <li key={id}>
               <Link
                 to={{
                   pathname: `${pathname}/${id}`,
-                  state: { backUrl: pathname, query },
+                  state: {
+                    from: location,
+                    query,
+                  },
                 }}
               >
-                {/* <img src={poster_path} alt={title} /> */}
+                <img
+                  src={`https://image.tmdb.org/t/p/w200/${poster_path}`}
+                  alt={title}
+                />
                 {title}
               </Link>
             </li>

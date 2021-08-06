@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { fetchTrendMovies } from 'services/ApiService';
 
 export default function HomePage() {
+  const location = useLocation();
   const [movies, setMovies] = useState(null);
 
   useEffect(() => {
@@ -15,11 +16,21 @@ export default function HomePage() {
 
       {movies && (
         <ul>
-          {movies.map(movie => (
-            <li key={movie.id}>
-              <Link to={`/movies/${movie.id}`}>
-                {/* <img src={movie.poster_path} alt={movie.title} /> */}
-                {movie.title}
+          {movies.map(({ id, title, poster_path }) => (
+            <li key={id}>
+              <Link
+                to={{
+                  pathname: `/movies/${id}`,
+                  state: {
+                    from: location,
+                  },
+                }}
+              >
+                <img
+                  src={`https://image.tmdb.org/t/p/w200/${poster_path}`}
+                  alt={title}
+                />
+                {title}
               </Link>
             </li>
           ))}

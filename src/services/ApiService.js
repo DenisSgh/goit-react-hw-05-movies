@@ -36,4 +36,30 @@ async function fetchMovieById(id) {
   return data;
 }
 
-export { fetchTrendMovies, fetchMoviesByQuery, fetchMovieById };
+async function fetchActorsCast(id) {
+  const { BASE_URL, BASE_KEY } = OPTIONS;
+
+  const data = await axios
+    .get(`${BASE_URL}movie/${id}/credits?api_key=${BASE_KEY}&language=en-US`)
+    .then(resp => resp.data.cast);
+  return data;
+}
+
+async function fetchMovieReviews(id) {
+  const { BASE_URL, BASE_KEY } = OPTIONS;
+
+  const data = await axios
+    .get(
+      `${BASE_URL}movie/${id}/reviews?api_key=${BASE_KEY}&language=en-US&page=1`,
+    )
+    .then(resp => resp.data.results);
+  return data;
+}
+
+export {
+  fetchTrendMovies,
+  fetchMoviesByQuery,
+  fetchMovieById,
+  fetchActorsCast,
+  fetchMovieReviews,
+};
