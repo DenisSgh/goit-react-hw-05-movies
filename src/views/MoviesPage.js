@@ -10,19 +10,22 @@ export default function MoviesPage() {
   const history = useHistory();
   const [query, setQuery] = useState('');
   const [movies, setMovies] = useState(null);
+  const value = new URLSearchParams(location.search).get('query');
+  console.log(value);
 
   useEffect(() => {
     if (search === '') {
       return;
     }
 
-    // history.push({ search: `query=${query}` });
     // console.log(history);
     // console.log(value);
     // setQuery();
-    // fetchMoviesByQuery(query).then(setMovies);
+    fetchMoviesByQuery(value).then(setMovies);
+    history.push({ search: `query=${value}` });
+    console.log(history);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [value]);
 
   useEffect(() => {
     console.log(1);
@@ -75,7 +78,6 @@ export default function MoviesPage() {
                   pathname: `${pathname}/${id}`,
                   state: {
                     from: location,
-                    query,
                   },
                 }}
               >

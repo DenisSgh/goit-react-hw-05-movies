@@ -39,7 +39,7 @@ export default function MovieDetailsPage() {
 
     if (state?.from.pathname !== '/') {
       history.push({
-        search: `query=cat`,
+        search: state.from.search,
       });
     }
   };
