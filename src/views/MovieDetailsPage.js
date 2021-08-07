@@ -21,15 +21,12 @@ export default function MovieDetailsPage() {
   const { state } = useLocation();
   const history = useHistory();
 
-  console.log(state);
-  console.log(history);
   useEffect(() => {
     fetchMovieById(movieId).then(setMovie);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleGoBack = () => {
-    console.log(state);
     history.push({
       pathname: state?.from?.pathname ?? '/movies',
     });
@@ -40,10 +37,6 @@ export default function MovieDetailsPage() {
       });
     }
   };
-
-  // useEffect(() => {
-  //   console.log(movie);
-  // }, [movie]);
 
   return (
     <>
@@ -75,14 +68,24 @@ export default function MovieDetailsPage() {
       )}
 
       <NavLink
-        to={`${url}/cast`}
+        to={{
+          pathname: `${url}/cast`,
+          state: {
+            from: { search: state?.from?.search },
+          },
+        }}
         className={s.link}
         activeClassName={s.activeLink}
       >
         Cast
       </NavLink>
       <NavLink
-        to={`${url}/reviews`}
+        to={{
+          pathname: `${url}/reviews`,
+          state: {
+            from: { search: state?.from?.search },
+          },
+        }}
         className={s.link}
         activeClassName={s.activeLink}
       >

@@ -1,11 +1,5 @@
 import { useState, useEffect } from 'react';
 import { fetchActorsCast } from 'services/ApiService';
-// import {
-// useParams,
-// useRouteMatch,
-// useLocation,
-// useHistory,
-// } from 'react-router-dom';
 
 // import s from './Views.module.css';
 
