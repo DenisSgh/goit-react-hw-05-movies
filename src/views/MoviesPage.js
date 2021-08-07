@@ -11,31 +11,16 @@ export default function MoviesPage() {
   const [query, setQuery] = useState('');
   const [movies, setMovies] = useState(null);
   const value = new URLSearchParams(location.search).get('query');
-  console.log(value);
 
   useEffect(() => {
     if (search === '') {
       return;
     }
 
-    // console.log(history);
-    // console.log(value);
-    // setQuery();
     fetchMoviesByQuery(value).then(setMovies);
     history.push({ search: `query=${value}` });
-    console.log(history);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
-
-  useEffect(() => {
-    console.log(1);
-    if (location.search === '') {
-      return;
-    }
-
-    // console.log(2);
-    // fetchMoviesByQuery(query).then(setMovies);
-  }, [location.search, query]);
 
   const handleChange = e => {
     setQuery(e.target.value);
@@ -44,7 +29,6 @@ export default function MoviesPage() {
   const handleSubmit = e => {
     e.preventDefault();
 
-    fetchMoviesByQuery(query).then(setMovies);
     history.push({ ...location, search: `query=${query}` });
     setQuery('');
   };

@@ -20,26 +20,23 @@ export default function MovieDetailsPage() {
   } = useRouteMatch();
   const { state } = useLocation();
   const history = useHistory();
-  // console.log(state);
 
+  console.log(state);
+  console.log(history);
   useEffect(() => {
     fetchMovieById(movieId).then(setMovie);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleGoBack = () => {
-    // history.push(state?.backUrl || '/movies');
-    // console.log(state?.from?.location);
-    // console.log(state?.backUrl);
-    // console.log(state);
     console.log(state);
     history.push({
       pathname: state?.from?.pathname ?? '/movies',
     });
 
-    if (state?.from.pathname !== '/') {
+    if (state?.from?.pathname !== '/') {
       history.push({
-        search: state.from.search,
+        search: state?.from?.search ?? '',
       });
     }
   };
