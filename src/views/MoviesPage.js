@@ -18,9 +18,9 @@ export default function MoviesPage() {
     }
 
     fetchMoviesByQuery(value).then(setMovies);
-    history.push({ search: `query=${value}` });
+    // history.push({ search });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+  }, [search]);
 
   const handleChange = e => {
     setQuery(e.target.value);
@@ -29,13 +29,17 @@ export default function MoviesPage() {
   const handleSubmit = e => {
     e.preventDefault();
 
+    if (query === '') {
+      return;
+    }
+
     history.push({ ...location, search: `query=${query}` });
     setQuery('');
   };
 
   return (
     <>
-      <form onSubmit={handleSubmit} /*className={s.SearchForm}*/>
+      <form onSubmit={handleSubmit} className={s.searchForm}>
         <input
           className={s.searchFormInput}
           type="text"
@@ -46,17 +50,15 @@ export default function MoviesPage() {
           placeholder="It's time to find new movie!"
         />
 
-        {
-          <button type="submit" className={s.searchFormButton}>
-            Search
-          </button>
-        }
+        <button type="submit" className={s.searchFormButton}>
+          Search
+        </button>
       </form>
 
       {movies && (
-        <ul>
+        <ul className={s.moviesList}>
           {movies.map(({ id, title, poster_path }) => (
-            <li key={id}>
+            <li key={id} className={s.movieItem}>
               <Link
                 to={{
                   pathname: `${pathname}/${id}`,
@@ -64,10 +66,12 @@ export default function MoviesPage() {
                     from: location,
                   },
                 }}
+                className={s.movieLink}
               >
                 <img
                   src={`https://image.tmdb.org/t/p/w200/${poster_path}`}
                   alt={title}
+                  className={s.movieImage}
                 />
                 {title}
               </Link>

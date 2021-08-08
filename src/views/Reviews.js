@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { fetchMovieReviews } from 'services/ApiService';
 
-// import s from './Views.module.css';
+import s from './Views.module.css';
 
 export default function Reviews({ movieId }) {
   const [reviews, setReviews] = useState([]);
@@ -16,10 +16,8 @@ export default function Reviews({ movieId }) {
       {reviews.length > 0 ? (
         <ul>
           {reviews.map(({ id, author, content }) => (
-            <li key={id}>
-              <p>
-                <b>Author: {author}</b>
-              </p>
+            <li key={id} className={s.reviewsItem}>
+              <p className={s.reviewsName}>Author: {author}</p>
               <p>{content}</p>
             </li>
           ))}

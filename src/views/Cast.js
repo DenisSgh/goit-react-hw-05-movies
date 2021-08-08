@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { fetchActorsCast } from 'services/ApiService';
 
-// import s from './Views.module.css';
+import s from './Views.module.css';
 
 export default function Cast({ movieId }) {
   const [cast, setCast] = useState([]);
@@ -14,9 +14,9 @@ export default function Cast({ movieId }) {
   return (
     <>
       {cast.length > 0 ? (
-        <ul>
+        <ul className={s.castList}>
           {cast.map(({ id, name, character, profile_path }) => (
-            <li key={id}>
+            <li key={id} className={s.castItem}>
               {profile_path ? (
                 <img
                   src={`https://image.tmdb.org/t/p/w200/${profile_path}`}
@@ -31,8 +31,11 @@ export default function Cast({ movieId }) {
                   width="200"
                 />
               )}
-              <p>{name}</p>
-              <p>Character: {character}</p>
+              <p className={s.castName}>{name}</p>
+              <p className={s.castCharacter}>
+                <span className={s.boldSpan}>Character: </span>
+                {character}
+              </p>
             </li>
           ))}
         </ul>
