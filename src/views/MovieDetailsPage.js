@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import {
   Route,
   NavLink,
@@ -7,10 +7,14 @@ import {
   useHistory,
 } from 'react-router-dom';
 import { fetchMovieById } from 'services/ApiService';
+import Loader from 'components/Loader';
 
-import Cast from 'views/Cast';
-import Reviews from 'views/Reviews';
 import s from './Views.module.css';
+
+const Cast = lazy(() => import('views/Cast' /* webpackChunkName: "cast" */));
+const Reviews = lazy(() =>
+  import('views/Reviews' /* webpackChunkName: "reviews" */),
+);
 
 export default function MovieDetailsPage() {
   const [movie, setMovie] = useState(null);
@@ -40,30 +44,32 @@ export default function MovieDetailsPage() {
 
   return (
     <>
-      <button
-        type="button"
-        className={s.searchFormButton}
-        onClick={handleGoBack}
-      >
+      <button type="button" className={s.goBackButton} onClick={handleGoBack}>
         Go back
       </button>
 
       {movie && (
-        <section>
+        <section className={s.detailsSection}>
           <img
-            src={`https://image.tmdb.org/t/p/w400/${movie.poster_path}`}
+            src={`https://image.tmdb.org/t/p/w300/${movie.poster_path}`}
             alt={movie.title}
           />
-          <h1>{movie.title}</h1>
-          <p>User Score: {movie.vote_average * 10}%</p>
-          <b>Overview</b>
-          <p>{movie.overview}</p>
-          <b>Genres</b>
-          <ul>
-            {movie.genres.map(({ id, name }) => (
-              <li key={id}>{name}</li>
-            ))}
-          </ul>
+          <div className={s.detailsContainer}>
+            <h1 className={s.detailsTitle}>{movie.title}</h1>
+            <p className={s.detailsScore}>
+              User Score: {movie.vote_average * 10}%
+            </p>
+            <p className={s.detailsOverview}>Overview</p>
+            <p>{movie.overview}</p>
+            <p className={s.detailsGenres}>Genres:</p>
+            <ul className={s.detailsGenresList}>
+              {movie.genres.map(({ id, name }) => (
+                <li key={id} className={s.detailsGenresItem}>
+                  {name}
+                </li>
+              ))}
+            </ul>
+          </div>
         </section>
       )}
 
@@ -91,16 +97,17 @@ export default function MovieDetailsPage() {
       >
         Reviews
       </NavLink>
-      <hr />
 
-      <Route
-        path={`${url}/cast`}
-        render={() => <Cast movieId={movieId} />}
-      ></Route>
-      <Route
-        path={`${url}/reviews`}
-        render={() => <Reviews movieId={movieId} />}
-      ></Route>
+      <Suspense fallback={<Loader />}>
+        <Route
+          path={`${url}/cast`}
+          render={() => <Cast movieId={movieId} />}
+        ></Route>
+        <Route
+          path={`${url}/reviews`}
+          render={() => <Reviews movieId={movieId} />}
+        ></Route>
+      </Suspense>
     </>
   );
 }
