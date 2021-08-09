@@ -77,7 +77,10 @@ export default function MovieDetailsPage() {
         to={{
           pathname: `${url}/cast`,
           state: {
-            from: { search: state?.from?.search },
+            from: {
+              pathname: state?.from?.pathname,
+              search: state?.from?.search,
+            },
           },
         }}
         className={s.link}
@@ -89,7 +92,10 @@ export default function MovieDetailsPage() {
         to={{
           pathname: `${url}/reviews`,
           state: {
-            from: { search: state?.from?.search },
+            from: {
+              pathname: state?.from?.pathname,
+              search: state?.from?.search,
+            },
           },
         }}
         className={s.link}
